@@ -1,0 +1,158 @@
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+// Define the structure for a student node
+typedef struct Student {
+    char usn[11];
+    char name[20];
+    char programme[10];
+    int sem;
+    char phno[11];
+    struct Student* next;
+} Student;
+
+// Function to create a new student node
+Student* createNode() {
+    Student* newNode = (Student*)malloc(sizeof(Student));
+    printf("Enter USN: ");
+    scanf("%s", newNode->usn);
+    printf("Enter Name: ");
+    scanf("%s", newNode->name);
+    printf("Enter Programme: ");
+    scanf("%s", newNode->programme);
+    printf("Enter Semester: ");
+    scanf("%d", &newNode->sem);
+    printf("Enter Phone Number: ");
+    scanf("%s", newNode->phno);
+    newNode->next = NULL;
+    return newNode;
+}
+
+// Function to insert a node at the front of the SLL
+void insertFront(Student** head) {
+    Student* newNode = createNode();
+    if (*head == NULL) {
+        *head = newNode;
+    } else {
+        newNode->next = *head;
+        *head = newNode;
+    }
+}
+
+// Function to insert a node at the end of the SLL
+void insertEnd(Student** head) {
+    Student* newNode = createNode();
+    if (*head == NULL) {
+        *head = newNode;
+    } else {
+        Student* temp = *head;
+        while (temp->next != NULL) {
+            temp = temp->next;
+        }
+        temp->next = newNode;
+    }
+}
+
+// Function to delete a node from the front of the SLL
+void deleteFront(Student** head) {
+    if (*head == NULL) {
+        printf("List is empty\n");
+    } else {
+        Student* temp = *head;
+        *head = (*head)->next;
+        free(temp);
+    }
+}
+
+// Function to delete a node from the end of the SLL
+void deleteEnd(Student** head) {
+    if (*head == NULL) {
+        printf("List is empty\n");
+    } else if ((*head)->next == NULL) {
+        free(*head);
+        *head = NULL;
+    } else {
+        Student* temp = *head;
+        while (temp->next->next != NULL) {
+            temp = temp->next;
+        }
+        free(temp->next);
+        temp->next = NULL;
+    }
+}
+
+// Function to display the SLL
+void display(Student* head) {
+    if (head == NULL) {
+        printf("List is empty\n");
+    } else {
+        Student* temp = head;
+        while (temp != NULL) {
+            printf("USN: %s\n", temp->usn);
+            printf("Name: %s\n", temp->name);
+            printf("Programme: %s\n", temp->programme);
+            printf("Semester: %d\n", temp->sem);
+            printf("Phone Number: %s\n", temp->phno);
+            printf("\n");
+            temp = temp->next;
+        }
+    }
+}
+
+// Function to count the number of nodes in the SLL
+int countNodes(Student* head) {
+    int count = 0;
+    Student* temp = head;
+    while (temp != NULL) {
+        count++;
+        temp = temp->next;
+    }
+    return count;
+}
+
+int main() {
+    Student* head = NULL;
+    int choice;
+    while (1) {
+        printf("1. Create SLL\n");
+        printf("2. Display SLL\n");
+        printf("3. Insert at End\n");
+        printf("4. Delete at End\n");
+        printf("5. Insert at Front\n");
+        printf("6. Delete at Front\n");
+        printf("7. Count Nodes\n");
+        printf("8. Exit\n");
+        printf("Enter your choice: ");
+        scanf("%d", &choice);
+        switch (choice) {
+            case 1:
+                insertFront(&head);
+                break;
+            case 2:
+                display(head);
+                break;
+            case 3:
+                insertEnd(&head);
+                break;
+            case 4:
+                deleteEnd(&head);
+                break;
+            case 5:
+                insertFront(&head);
+                break;
+            case 6:
+                deleteFront(&head);
+                break;
+            case 7:
+                printf("Number of nodes: %d\n", countNodes(head));
+                break;
+            case 8:
+                exit(0);
+            default:
+                printf("Invalid choice\n");
+        }
+    }
+    return 0;
+}
